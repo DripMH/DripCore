@@ -1,0 +1,5 @@
+name: DripCore
+version: '${project.version}'
+main: com.github.dripmh.dripcore.DripCore
+api-version: 1.18
+description: Core plugin for the Drip Minehut server
