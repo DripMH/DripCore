@@ -8,6 +8,6 @@ public final class DripCore extends JavaPlugin {
     @Override
     public void onEnable() {
         Bukkit.broadcastMessage( "hi" );
-
+        Bukkit.broadcastMessage( "server is online" );
     }
 }
