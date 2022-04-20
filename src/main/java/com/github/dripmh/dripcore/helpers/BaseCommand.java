@@ -73,6 +73,13 @@ public abstract class BaseCommand implements CommandExecutor, TabCompleter {
         this.usage = usage;
     }
 
+    public BaseCommand( String label, String permission, String usage ) {
+        this.label = label;
+        this.permission = permission;
+        this.permissionMsg = Messages.PERMS_DENIED;
+        this.usage = usage;
+    }
+
     // will be done in the individual class, depending on the need
     public abstract List<String> onTabComplete( CommandSender sender, Command command, String label, String args[] );
 
@@ -87,11 +94,11 @@ public abstract class BaseCommand implements CommandExecutor, TabCompleter {
     }
 
     public void sendPermissionMsg( CommandSender sender ) {
-        sender.sendMessage( permissionMsg );
+        sender.sendMessage( CoreUtils.getColored( permissionMsg ) );
     }
 
     public void sendUsage( CommandSender sender ) {
-        sender.sendMessage( usage );
+        sender.sendMessage( CoreUtils.getColored( usage ) );
     }
 
     public void sendInvalidPlayerArg( CommandSender sender, String input ) {
