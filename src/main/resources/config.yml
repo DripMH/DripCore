@@ -1,0 +1,7 @@
+teleport:
+  tp-perm: "server.jrmod"
+  tphere-perm: "server.mod"
+  tpo-perm: "server.srmod"
+  tpohere-perm: "server.srmod"
+  tptoggle-perm: "server.srmod"
+  tpnotifs-perm: "server.admin"
