@@ -2,6 +2,7 @@ package com.github.dripmh.dripcore;
 
 import com.github.cyberryan1.cybercore.CyberCore;
 import com.github.cyberryan1.cybercore.utils.VaultUtils;
+import com.github.dripmh.dripcore.features.teleport.*;
 import com.github.dripmh.dripcore.utils.yml.YMLUtils;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -15,5 +16,17 @@ public final class DripCore extends JavaPlugin {
 
         // Update and reload config/data files
         YMLUtils.getConfig().getYMLManager().reloadConfig();
+        YMLUtils.getData().getYMLManager().updateConfig();
+
+        // Register all commands
+        registerCommands();
+    }
+
+    private void registerCommands() {
+        new TpCommand();
+        new TphereCommand();
+        new TpoCommand();
+        new TpoHereCommand();
+        new TpToggleCommand();
     }
 }
