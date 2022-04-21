@@ -1,16 +1,18 @@
-package com.github.dripmh.dripcore.helpers;
+package com.github.cyberryan1.dripcore.features;
 
-import com.github.cyberryan1.cybercore.CyberCore;
 import com.github.cyberryan1.cybercore.utils.CoreUtils;
 import com.github.cyberryan1.cybercore.utils.VaultUtils;
-import org.bukkit.Bukkit;
+import com.github.cyberryan1.dripcore.lists.Usages;
+import com.github.cyberryan1.dripcore.utils.yml.YMLUtils;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class BaseCommand implements CommandExecutor, TabCompleter {
+
+    private static final String PRIMARY_COLOR = YMLUtils.getConfig().getColoredStr( "global.primary-color" );
+    private static final String SECONDARY_COLOR = YMLUtils.getConfig().getColoredStr( "global.secondary-color" );
 
     // returns true if the sender is a player, false if not
     public static boolean demandPlayer( CommandSender sender ) {
@@ -18,7 +20,7 @@ public abstract class BaseCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        sender.sendMessage( Messages.PLAYER_REQUIRED );
+        sender.sendMessage( Usages.PLAYER_REQUIRED );
         return false;
     }
 
@@ -28,37 +30,15 @@ public abstract class BaseCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        sender.sendMessage( Messages.CONSOLE_REQUIRED );
+        sender.sendMessage( Usages.CONSOLE_REQUIRED );
         return false;
     }
 
-    // returns all online player names
-    public static List<String> getAllOnlinePlayerNames() {
-        List<String> toReturn = new ArrayList<>();
-        for ( Player p : Bukkit.getOnlinePlayers() ) {
-            toReturn.add( p.getName() );
-        }
-        return toReturn;
-    }
-
-    // returns all online player names that starts with the input
-    public static List<String> matchOnlinePlayers( String input ) {
-        List<String> toReturn = new ArrayList<>();
-        for ( Player p : Bukkit.getOnlinePlayers() ) {
-            if ( p.getName().toUpperCase().startsWith( input.toUpperCase() ) ) {
-                toReturn.add( p.getName() );
-            }
-        }
-        return toReturn.size() == 0 ? null : toReturn;
-    }
-
-    // returns the remaining arguments
-    public static String combineRemainingArgs( String[] args, int start ) {
-        String toReturn = "";
-        for ( int i = start; i < args.length; i++ ) {
-            toReturn += args[i] + " ";
-        }
-        return toReturn;
+    // formats a string with the primary and secondary colors, as desired
+    // use the &y for the primary color and &u for the secondary color
+    public static String getColorizedStr( String str ) {
+        str = str.replaceAll( "&y", PRIMARY_COLOR ).replaceAll( "&u", SECONDARY_COLOR );
+        return CoreUtils.getColored( str );
     }
 
     protected String label;
@@ -70,13 +50,6 @@ public abstract class BaseCommand implements CommandExecutor, TabCompleter {
         this.label = label;
         this.permission = permission;
         this.permissionMsg = permissionMsg;
-        this.usage = usage;
-    }
-
-    public BaseCommand( String label, String permission, String usage ) {
-        this.label = label;
-        this.permission = permission;
-        this.permissionMsg = Messages.PERMS_DENIED;
         this.usage = usage;
     }
 
@@ -94,21 +67,14 @@ public abstract class BaseCommand implements CommandExecutor, TabCompleter {
     }
 
     public void sendPermissionMsg( CommandSender sender ) {
-        sender.sendMessage( CoreUtils.getColored( permissionMsg ) );
+        sender.sendMessage( permissionMsg );
     }
 
     public void sendUsage( CommandSender sender ) {
-        sender.sendMessage( CoreUtils.getColored( usage ) );
+        sender.sendMessage( usage );
     }
 
     public void sendInvalidPlayerArg( CommandSender sender, String input ) {
         sender.sendMessage( CoreUtils.getColored( "&7Could not find the player &b\"" + input + "&b\"" ) );
-    }
-
-    public void register( boolean includeTabComplete ) {
-        CyberCore.getPlugin().getCommand( this.label ).setExecutor( this );
-        if ( includeTabComplete ) {
-            CyberCore.getPlugin().getCommand( this.label ).setTabCompleter( this );
-        }
     }
 }

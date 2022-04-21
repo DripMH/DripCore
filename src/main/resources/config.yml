@@ -1,7 +1,131 @@
-teleport:
-  tp-perm: "server.jrmod"
-  tphere-perm: "server.mod"
-  tpo-perm: "server.srmod"
-  tpohere-perm: "server.srmod"
-  tptoggle-perm: "server.srmod"
-  tpnotifs-perm: "server.admin"
+global:
+  # What to send when a player is required for something
+  player-required: "&7Only players can execute this!"
+  # What to send when console is required for something
+  console-required: "&7This can only be ran through console!"
+
+  # Primary color
+  primary-color: "&b"
+  # Secondary color
+  secondary-color: "&7"
+
+commands:
+  gamemode:
+    adventure: # /gma [player] command
+      permission: "gamemode.adventure" # permission to use /gma
+      permission-message: "&cInsufficient Permissions!" # permission message sent
+      usage: "&8/&7gma &b[player]" # how to use the command
+    creative: # /gmc [player] command
+      permission: "gamemode.creative"
+      permission-message: "&cInsufficient Permissions!"
+      usage: "&8/&7gmc &b[player]"
+    spectator: # /gmsp [player] command
+      permission: "gamemode.spectator"
+      permission-message: "&cInsufficient Permissions!"
+      usage: "&8/&7gmsp &b[player]"
+    survival: # /gms [player] command
+      permission: "gamemode.survival"
+      permission-message: "&cInsufficient Permissions!"
+      usage: "&8/&7gms &b[player]"
+
+  flight:
+    permission: "flight.use"
+    permission-message: "&cInsufficient Permissions"
+    permission-others: "flight.others" # Permission to toggle other player's flight
+    permission-others-message: "&cInsufficient Permissions" # Permission message when a player tries to toggle another player's flight
+    usage: "&8/&7fly &b[player]"
+
+  teleport:
+    tp: # /tp (player)
+      permission: "teleport.use"
+      permission-message: "&cInsufficient Permissions!"
+      usage: "&8/&7tp &b(player)"
+    tphere: # /tphere (player)
+      permission: "teleport.here"
+      permission-message: "&cInsufficient Permissions!"
+      usage: "&8/&7tphere &b(player)"
+    tpo: # /tpo (player)
+      permission: "teleport.override"
+      permission-message: "&cInsufficient Permissions!"
+      usage: "&8/&7tpo &b(player)"
+    tpohere: # /tpohere (player)
+      permission: "teleport.here.override"
+      permission-message: "&cInsufficient Permissions!"
+      usage: "&8/&7tpohere &b(player)"
+    tptoggle: # /tptoggle
+      permission: "teleport.toggle"
+      permission-message: "&cInsufficient Permissions!"
+      # Allows users to teleport to a player with teleportation disabled
+      permission-bypass: "teleport.toggle.bypass"
+      usage: "&8/&7tptoggle"
+      # What to send when someone has teleportation disabled
+      # Variables allowed for use: [PLAYER] - the player who has teleportation disabled
+      teleport-disabled: "&b[PLAYER] &7has teleportation disabled"
+    notifs:
+      # Sends a message whenever someone uses the teleport command
+      enabled: true
+      # Permission to receive the notifications
+      permission: "teleport.notifs"
+      # Variables:
+        # [STAFF] - the player executing the command
+        # [TARGET] - the target of the command
+      # Message to send when someone teleports to someone
+      tp-message: "&7[[STAFF] has teleported to [TARGET]]"
+      # Message to send when someone teleports someone else to themselves
+      tphere-message: "&7[[STAFF] teleported [TARGET] to themself]"
+      # Message to send when someone force teleports to someone
+      tpo-message: "&7[[STAFF] has force teleported to [TARGET]]"
+      # Message to send when someone force teleports someone else to themselves
+      tpohere-message: "&7[[STAFF] force teleported [TARGET] to themself]"
+
+  buy:
+    # Must include the "https://" at the start!
+    store-link: "https://arandomstorelink.com"
+
+  workbench:
+    permission: "workbench.use"
+    permission-message: "&cInsufficient Permissions!"
+
+  enderchest:
+    permission: "enderchest.use"
+    permission-message: "&cInsufficient Permissions!"
+    # permission to view other player's enderchests
+    permission-others: "enderchest.others"
+    permission-others-message: "&cInsufficient Permissions!"
+    usage: "&8/&7enderchest &b[player]"
+
+  invsee:
+    permission: "invsee.use"
+    permission-message: "&cInsufficient Permissions!"
+    usage: "&8/&7invsee &b(player)"
+
+  discord:
+    # Must include the "https://" at the start!
+    link: "https://discord.gg/"
+
+  tags:
+    permission: "tags.use"
+    permission-message: "&cInsufficient Permissions!"
+    usage: "&8/&7tags &b(apply/appeal/report) (player)"
+
+  broadcast:
+    permission: "broadcast.use"
+    permission-message: "&cInsufficient Permissions!"
+    # use [MESSAGE] variable for the message to broadcast
+    broadcast-message: "&9&lSERVER &7» &b[MESSAGE]"
+    usage: "&8/&7broadcast &b(message)"
+
+  rules:
+    rules-message:
+      - ""
+      - " &8- &7Any forms of &bharassment, discrimination, or anything a staff deems unfit&7 for our chat is not allowed."
+      - " &8- &7Using &balt accounts&7 to &bbypass&7 any network &bpunishments&7 is not permitted."
+      - " &8- &7Any sort of &bthreats&7 or &bencouraging death&7 won't be tolerated."
+      - " &8- &7You may not post any &blinks&7 that lead to any &bscam, sketchy, unsafe websites&7 or &bexternal server IP's&7."
+      - " &8- &bAbusing&7 any sort of &bexploits or bugs&7 or using anything that gives you an &bunfair advantage&7 is not permitted."
+      - " &8- &7Staff have the &bfinal say&7 on everything. Do not argue with them."
+      - ""
+
+features:
+  # Disable hunger (true) or enable hunger (false)
+  no-hunger: true

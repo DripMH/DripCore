@@ -1,11 +1,32 @@
-name: DripCore
+name: ServerCore
 version: '${project.version}'
-main: com.github.dripmh.dripcore.DripCore
-api-version: 1.18
-description: Core plugin for the Drip Minehut server
+main: com.github.cyberryan1.servercore.ServerCore
+api-version: 1.16
+softdepend: [ Vault ]
+authors: [ CyberRyan ]
 commands:
+  gma:
+  gmc:
+  gmsp:
+  gms:
+  flight:
+    aliases: [fly]
   tp:
+    aliases: [teleport]
   tphere:
   tpo:
   tpohere:
   tptoggle:
+  ping:
+  buy:
+  workbench:
+    aliases: [wb, craft, craftingbench, cb]
+  enderchest:
+    aliases: [ec]
+  invsee:
+    aliases: [openinv]
+  discord:
+  tags:
+  broadcast:
+    aliases: [bc]
+  rules:
