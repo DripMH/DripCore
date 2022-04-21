@@ -1,7 +1,7 @@
-name: ServerCore
+name: DripCore
 version: '${project.version}'
-main: com.github.cyberryan1.servercore.ServerCore
-api-version: 1.16
+main: com.github.cyberryan1.dripcore.DripCore
+api-version: 1.18
 softdepend: [ Vault ]
 authors: [ CyberRyan ]
 commands:
