@@ -2,6 +2,7 @@ package com.github.cyberryan1.dripcore;
 
 import com.github.cyberryan1.cybercore.CyberCore;
 import com.github.cyberryan1.cybercore.utils.VaultUtils;
+import com.github.cyberryan1.dripcore.features.anticommand.AntiCommandEvents;
 import com.github.cyberryan1.dripcore.features.broadcast.BroadcastCommand;
 import com.github.cyberryan1.dripcore.features.buy.BuyCommand;
 import com.github.cyberryan1.dripcore.features.discord.DiscordCommand;
@@ -115,5 +116,6 @@ public final class DripCore extends JavaPlugin {
 
     private void registerAllEvents() {
         this.getServer().getPluginManager().registerEvents( new HungerEvents(), this );
+        this.getServer().getPluginManager().registerEvents( new AntiCommandEvents(), this );
     }
 }

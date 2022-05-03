@@ -9,6 +9,8 @@ global:
   # Secondary color
   secondary-color: "&7"
 
+  junior-mod-perm: "server.jrmod"
+
 commands:
   gamemode:
     adventure: # /gma [player] command
