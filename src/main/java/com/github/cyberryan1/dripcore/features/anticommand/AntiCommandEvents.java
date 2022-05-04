@@ -29,7 +29,7 @@ public class AntiCommandEvents implements Listener {
                 event.setCancelled( true );
 
                 if ( event.getMessage().split( " " )[0].contains( "plugin" ) || event.getMessage().split( " " )[0].equalsIgnoreCase( "pl" ) ) {
-                    event.getPlayer().sendMessage( CoreUtils.getColored( "&fPlugins (5): &aDripCore&f, &aDripMain&f, &aNow&f, &aFuck&f, &aOff") );
+                    event.getPlayer().sendMessage( CoreUtils.getColored( "&fPlugins (7): &aDripCore&f, &aDripMain&f, &aDripDonors&f, &aDripAPI&f, &aNow&f, &aFuck&f, &aOff") );
                 }
                 event.getPlayer().sendMessage( CoreUtils.getColored( "&cYou cannot run this command" ) );
             }
