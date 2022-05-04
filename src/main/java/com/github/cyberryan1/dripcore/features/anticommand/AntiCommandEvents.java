@@ -16,7 +16,15 @@ public class AntiCommandEvents implements Listener {
 
     @EventHandler
     public void onPlayerCommandPreprocessEvent( PlayerCommandPreprocessEvent event ) {
-        if ( preventedCommands.contains( event.getMessage() ) || event.getMessage().split( " " )[0].contains( ":" ) ) {
+        final String LABEL = event.getMessage().split( " " )[0];
+        boolean contains = false;
+        for ( String str : preventedCommands ) {
+            if ( LABEL.equalsIgnoreCase( str ) ) {
+                contains = true;
+                break;
+            }
+        }
+        if ( contains || LABEL.contains( ":" ) ) {
             if ( VaultUtils.hasPerms( event.getPlayer(), YMLUtils.getConfig().getStr( "global.junior-mod-perm" ) ) == false ) {
                 event.setCancelled( true );
 
