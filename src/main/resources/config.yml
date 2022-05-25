@@ -131,3 +131,5 @@ commands:
 features:
   # Disable hunger (true) or enable hunger (false)
   no-hunger: true
+  # Give players night vision on join (true) or not (false)
+  night-vision: true
