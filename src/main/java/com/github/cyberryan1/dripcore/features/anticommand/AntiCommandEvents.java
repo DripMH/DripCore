@@ -12,7 +12,9 @@ import java.util.List;
 
 public class AntiCommandEvents implements Listener {
 
-    private static List<String> preventedCommands = new ArrayList<>( List.of( "/pl", "/plugin", "/plugins", "/say", "/me", "/?", "/w", "/whisper" ));
+    private static List<String> preventedCommands = new ArrayList<>( List.of(
+            "/pl", "/plugin", "/plugins", "/say", "/me", "/?", "/w", "/whisper", "/help"
+    ) );
 
     @EventHandler
     public void onPlayerCommandPreprocessEvent( PlayerCommandPreprocessEvent event ) {
