@@ -12,7 +12,7 @@ import com.github.cyberryan1.dripcore.features.gamemode.AdventureCommand;
 import com.github.cyberryan1.dripcore.features.gamemode.CreativeCommand;
 import com.github.cyberryan1.dripcore.features.gamemode.SpectatorCommand;
 import com.github.cyberryan1.dripcore.features.gamemode.SurvivalCommand;
-import com.github.cyberryan1.dripcore.features.hunger.HungerEvents;
+import com.github.cyberryan1.dripcore.features.global.GlobalEvents;
 import com.github.cyberryan1.dripcore.features.invsee.InvseeCommand;
 import com.github.cyberryan1.dripcore.features.ping.PingCommand;
 import com.github.cyberryan1.dripcore.features.rules.RulesCommand;
@@ -115,7 +115,7 @@ public final class DripCore extends JavaPlugin {
     }
 
     private void registerAllEvents() {
-        this.getServer().getPluginManager().registerEvents( new HungerEvents(), this );
+        this.getServer().getPluginManager().registerEvents( new GlobalEvents(), this );
         this.getServer().getPluginManager().registerEvents( new AntiCommandEvents(), this );
     }
 }
