@@ -30,3 +30,4 @@ commands:
   broadcast:
     aliases: [bc]
   rules:
+  playtime:
