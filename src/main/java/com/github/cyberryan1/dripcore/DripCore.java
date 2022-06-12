@@ -15,6 +15,8 @@ import com.github.cyberryan1.dripcore.features.gamemode.SurvivalCommand;
 import com.github.cyberryan1.dripcore.features.global.GlobalEvents;
 import com.github.cyberryan1.dripcore.features.invsee.InvseeCommand;
 import com.github.cyberryan1.dripcore.features.ping.PingCommand;
+import com.github.cyberryan1.dripcore.features.playtime.PlaytimeCommand;
+import com.github.cyberryan1.dripcore.features.playtime.PlaytimeManager;
 import com.github.cyberryan1.dripcore.features.rules.RulesCommand;
 import com.github.cyberryan1.dripcore.features.tags.TagsCommand;
 import com.github.cyberryan1.dripcore.features.teleport.*;
@@ -41,6 +43,13 @@ public final class DripCore extends JavaPlugin {
         registerAllCommands();
         // Register events
         registerAllEvents();
+
+        PlaytimeManager.initializeAllPlayers();
+    }
+
+    @Override
+    public void onDisable() {
+        PlaytimeManager.saveAllPlayers();
     }
 
     private void registerAllCommands() {
@@ -112,6 +121,10 @@ public final class DripCore extends JavaPlugin {
         RulesCommand rulesCommand = new RulesCommand();
         this.getCommand( "rules" ).setExecutor( rulesCommand );
         this.getCommand( "rules" ).setTabCompleter( rulesCommand );
+
+        PlaytimeCommand playtimeCommand = new PlaytimeCommand();
+        this.getCommand( "playtime" ).setExecutor( playtimeCommand );
+        this.getCommand( "playtime" ).setTabCompleter( playtimeCommand );
     }
 
     private void registerAllEvents() {
