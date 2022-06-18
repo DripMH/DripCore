@@ -25,7 +25,7 @@ public class GlobalEvents implements Listener {
     @EventHandler
     public void onPlayerJoin( PlayerJoinEvent event ) {
         if ( NIGHTVISION_ENABLED ) {
-            event.getPlayer().addPotionEffect( new PotionEffect( PotionEffectType.NIGHT_VISION, 100000, 10, false, false ) );
+            event.getPlayer().addPotionEffect( new PotionEffect( PotionEffectType.NIGHT_VISION, 1000000, 10, false, false ) );
         }
 
         PlaytimeManager.initializePlayer( event.getPlayer() );
