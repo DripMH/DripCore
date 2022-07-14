@@ -36,6 +36,7 @@ public class PlaytimeManager {
     }
 
     public static void savePlayer( Player player ) {
+        if ( playerJoinTimes.containsKey( player ) == false ) { return; }
         final long join = playerJoinTimes.get( player );
         final long now = Utils.getCurrentTimestamp();
         final long playtimeAdded = now - join;
