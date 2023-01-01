@@ -1,32 +1,38 @@
 package com.github.cyberryan1.dripcore.features.buy;
 
-import com.github.cyberryan1.dripcore.features.BaseCommand;
+import com.github.cyberryan1.cybercore.spigot.command.CyberCommand;
+import com.github.cyberryan1.cybercore.spigot.command.sent.SentCommand;
+import com.github.cyberryan1.cybercore.spigot.utils.CyberColorUtils;
 import com.github.cyberryan1.dripcore.utils.yml.YMLUtils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 
 import java.util.List;
 
-public class BuyCommand extends BaseCommand {
+public class BuyCommand extends CyberCommand {
 
     public BuyCommand() {
-        super( "buy", null, null, null );
+        super(
+                "buy",
+                "&8/&7buy"
+        );
+        setDemandPlayer( true );
+
+        register( false );
     }
 
 
     @Override
-    public List<String> onTabComplete( CommandSender sender, Command command, String label, String[] args ) {
-        return null;
+    public List<String> tabComplete( SentCommand command ) {
+        return List.of();
     }
 
     @Override
-    public boolean onCommand( CommandSender sender, Command command, String label, String[] args ) {
+    public boolean execute( SentCommand command ) {
 
         String link = YMLUtils.getConfig().getStr( "commands.buy.store-link" );
-        sender.spigot().sendMessage( new ComponentBuilder()
-                .append( getColorizedStr( "\n&9&lSTORE &7» &bClick Here\n" ) )
+        command.getSender().spigot().sendMessage( new ComponentBuilder()
+                .append( CyberColorUtils.getColored( "\n&9&lSTORE &7» &bClick Here\n" ) )
                 .event( new ClickEvent( ClickEvent.Action.OPEN_URL, link ) )
                 .create()
         );

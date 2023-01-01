@@ -1,29 +1,35 @@
 package com.github.cyberryan1.dripcore.features.rules;
 
-import com.github.cyberryan1.dripcore.features.BaseCommand;
+import com.github.cyberryan1.cybercore.spigot.command.CyberCommand;
+import com.github.cyberryan1.cybercore.spigot.command.sent.SentCommand;
+import com.github.cyberryan1.cybercore.spigot.utils.CyberMsgUtils;
 import com.github.cyberryan1.dripcore.utils.yml.YMLUtils;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 
 import java.util.List;
 
-public class RulesCommand extends BaseCommand {
+public class RulesCommand extends CyberCommand {
+
+    final String rules[];
 
     public RulesCommand() {
-        super( "rules", null, null, null );
+        super(
+                "rules",
+                "&8/&7rules"
+        );
+
+        register( false );
+
+        rules = YMLUtils.getConfig().getColoredStrList( "commands.rules.rules-message" );
     }
 
     @Override
-    public List<String> onTabComplete( CommandSender sender, Command command, String label, String[] args ) {
-        return null;
+    public List<String> tabComplete( SentCommand command ) {
+        return List.of();
     }
 
     @Override
-    public boolean onCommand( CommandSender sender, Command command, String label, String[] args ) {
-
-        String rules[] = YMLUtils.getConfig().getColoredStrList( "commands.rules.rules-message" );
-        sender.sendMessage( rules );
-
+    public boolean execute( SentCommand command ) {
+        CyberMsgUtils.sendMsg( command.getSender(), rules );
         return true;
     }
 }

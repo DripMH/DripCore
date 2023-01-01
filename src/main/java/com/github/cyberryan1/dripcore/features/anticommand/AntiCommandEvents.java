@@ -1,7 +1,7 @@
 package com.github.cyberryan1.dripcore.features.anticommand;
 
-import com.github.cyberryan1.cybercore.utils.CoreUtils;
-import com.github.cyberryan1.cybercore.utils.VaultUtils;
+import com.github.cyberryan1.cybercore.spigot.utils.CyberMsgUtils;
+import com.github.cyberryan1.cybercore.spigot.utils.CyberVaultUtils;
 import com.github.cyberryan1.dripcore.utils.yml.YMLUtils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,6 +16,12 @@ public class AntiCommandEvents implements Listener {
             "/pl", "/plugin", "/plugins", "/say", "/me", "/?", "/w", "/whisper", "/help"
     ) );
 
+    private static String JUNIOR_MOD_PERM = "";
+
+    public AntiCommandEvents() {
+        JUNIOR_MOD_PERM = YMLUtils.getConfig().getStr( "global.junior-mod-perm" );
+    }
+
     @EventHandler
     public void onPlayerCommandPreprocessEvent( PlayerCommandPreprocessEvent event ) {
         final String LABEL = event.getMessage().split( " " )[0];
@@ -27,13 +33,15 @@ public class AntiCommandEvents implements Listener {
             }
         }
         if ( contains || LABEL.contains( ":" ) ) {
-            if ( VaultUtils.hasPerms( event.getPlayer(), YMLUtils.getConfig().getStr( "global.junior-mod-perm" ) ) == false ) {
+            if ( CyberVaultUtils.hasPerms( event.getPlayer(), JUNIOR_MOD_PERM ) == false ) {
                 event.setCancelled( true );
 
                 if ( event.getMessage().split( " " )[0].contains( "plugin" ) || event.getMessage().split( " " )[0].equalsIgnoreCase( "pl" ) ) {
-                    event.getPlayer().sendMessage( CoreUtils.getColored( "&fPlugins (7): &aDripCore&f, &aDripMain&f, &aDripDonors&f, &aDripAPI&f, &aNow&f, &aFuck&f, &aOff") );
+                    CyberMsgUtils.sendMsg( event.getPlayer(), "&fPlugins (7): &aDripCore&f, &aDripMain&f, &aDripDonors&f, &aDripAPI&f, &aNow&f, &aFuck&f, &aOff" );
                 }
-                event.getPlayer().sendMessage( CoreUtils.getColored( "&cYou cannot run this command" ) );
+                else {
+                    CyberMsgUtils.sendMsg( event.getPlayer(), "&cYou cannot run this command" );
+                }
             }
         }
     }

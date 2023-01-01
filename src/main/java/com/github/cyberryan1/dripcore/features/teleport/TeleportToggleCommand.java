@@ -1,52 +1,49 @@
 package com.github.cyberryan1.dripcore.features.teleport;
 
-import com.github.cyberryan1.dripcore.features.BaseCommand;
-import com.github.cyberryan1.dripcore.lists.PermissionMessages;
-import com.github.cyberryan1.dripcore.lists.Permissions;
-import com.github.cyberryan1.dripcore.lists.Usages;
+import com.github.cyberryan1.cybercore.spigot.command.CyberCommand;
+import com.github.cyberryan1.cybercore.spigot.command.sent.SentCommand;
+import com.github.cyberryan1.cybercore.spigot.utils.CyberMsgUtils;
 import com.github.cyberryan1.dripcore.utils.yml.YMLUtils;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class TeleportToggleCommand extends BaseCommand {
+public class TeleportToggleCommand extends CyberCommand {
 
     public TeleportToggleCommand() {
-        super( "tptoggle", Permissions.TELEPORT_TOGGLE, PermissionMessages.TELEPORT_TOGGLE, Usages.TELEPORT_TOGGLE );
+        super(
+                "tptoggle",
+                YMLUtils.getConfigUtils().getStr( "commands.teleport.tptoggle.permission" ),
+                "&8/&7tptoggle"
+        );
+        setDemandPlayer( true );
+        setDemandPermission( true );
+
+        register( false );
+    }
+    
+    public List<String> tabComplete( SentCommand command ) {
+        return List.of();
     }
 
-
     @Override
-    public List<String> onTabComplete( CommandSender sender, Command command, String label, String[] args ) {
-        return null;
-    }
+    public boolean execute( SentCommand command ) {
+        final Player player = command.getPlayer();
 
-    @Override
-    public boolean onCommand( CommandSender sender, Command command, String label, String[] args ) {
+        if ( TeleportUtils.hasTeleportEnabled( player ) == false ) {
+            // enabling teleports
+            YMLUtils.getData().set( "teleport.toggle." + player.getUniqueId().toString(), null );
+            YMLUtils.getData().save();
 
-        if ( permissionsAllowed( sender ) == false ) {
-            sendPermissionMsg( sender );
-            return true;
+            CyberMsgUtils.sendMsg( player, "&aEnabled&7 other players to teleport to you" );
         }
 
-        else if ( demandPlayer( sender ) ) {
-            Player player = ( Player ) sender;
+        else {
+            // disabling teleports
+            YMLUtils.getData().set( "teleport.toggle." + player.getUniqueId().toString() + ".disabled", true );
+            YMLUtils.getData().save();
 
-            if ( TeleportUtils.hasTeleportEnabled( player ) == false ) {
-                // enabling teleports
-                YMLUtils.getData().set( "teleport.toggle." + player.getUniqueId().toString(), null );
-                YMLUtils.getData().save();
-                sender.sendMessage( getColorizedStr( "&aEnabled&u other players to teleport to you" ) );
-            }
-
-            else {
-                // disabling teleports
-                YMLUtils.getData().set( "teleport.toggle." + player.getUniqueId().toString() + ".disabled", true );
-                YMLUtils.getData().save();
-                sender.sendMessage( getColorizedStr( "&cDisabled&u other players from teleporting to you" ) );
-            }
+            CyberMsgUtils.sendMsg( player, "&acDisabled&7 other players from teleporting to you" );
         }
 
         return true;

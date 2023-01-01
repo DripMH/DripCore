@@ -1,89 +1,72 @@
 package com.github.cyberryan1.dripcore.features.flight;
 
-import com.github.cyberryan1.cybercore.utils.CoreUtils;
-import com.github.cyberryan1.cybercore.utils.VaultUtils;
-import com.github.cyberryan1.dripcore.features.BaseCommand;
-import com.github.cyberryan1.dripcore.lists.PermissionMessages;
-import com.github.cyberryan1.dripcore.lists.Permissions;
-import com.github.cyberryan1.dripcore.lists.Usages;
-import com.github.cyberryan1.dripcore.utils.CommandUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
+import com.github.cyberryan1.cybercore.spigot.command.CyberCommand;
+import com.github.cyberryan1.cybercore.spigot.command.sent.SentCommand;
+import com.github.cyberryan1.cybercore.spigot.command.settings.ArgType;
+import com.github.cyberryan1.cybercore.spigot.utils.CyberMsgUtils;
+import com.github.cyberryan1.cybercore.spigot.utils.CyberVaultUtils;
+import com.github.cyberryan1.dripcore.utils.yml.YMLUtils;
 import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class FlightCommand extends BaseCommand {
+public class FlightCommand extends CyberCommand {
+
+    private final String FLIGHT_OTHERS_PERM;
 
     public FlightCommand() {
-        super( "flight", Permissions.FLIGHT, PermissionMessages.FLIGHT, Usages.FLIGHT );
+        super(
+                "flight",
+                YMLUtils.getConfigUtils().getStr( "commands.flight.permission" ),
+                "&8/&7fly &b[player]"
+        );
+        setDemandPlayer( true );
+        setDemandPermission( true );
+        setMinArgLength( 0 );
+        setArgType( 0, ArgType.ONLINE_PLAYER );
+
+        register( true );
+
+        FLIGHT_OTHERS_PERM = YMLUtils.getConfigUtils().getStr( "commands.flight.permission-others" );
     }
 
     @Override
-    public List<String> onTabComplete( CommandSender sender, Command command, String label, String[] args ) {
-        if ( VaultUtils.hasPerms( sender, Permissions.FLIGHT_OTHERS ) ) {
-            if ( args.length == 0 ) {
-                return CommandUtils.getAllOnlinePlayerNames();
-            }
-            else if ( args.length == 1 ) {
-                return CommandUtils.matchOnlinePlayers( args[0] );
-            }
-        }
-        return null;
+    public List<String> tabComplete( SentCommand command ) {
+        return List.of();
     }
 
     @Override
-    public boolean onCommand( CommandSender sender, Command command, String label, String[] args ) {
+    public boolean execute( SentCommand command ) {
+        final Player player = command.getPlayer();
 
-        if ( permissionsAllowed( sender ) == false ) {
-            sendPermissionMsg( sender );
-            return true;
-        }
+        if ( command.getArgs().length == 0 ) { // /flight
+            if ( player.getAllowFlight() == false ) { // enabling flight
+                player.setAllowFlight( true );
+                CyberMsgUtils.sendMsg( player, "&7Your flight has been &aenabled" );
+            }
 
-        else if ( args.length == 0 ) { // /flight
-            if ( demandPlayer( sender ) ) {
-                Player player = ( Player ) sender;
-                if ( player.getAllowFlight() == false ) { // enabling flight
-                    player.setAllowFlight( true );
-                    sender.sendMessage( getColorizedStr( "&uYour flight has been &aenabled" ) );
-                }
-
-                else { // disabling flight
-                    player.setAllowFlight( false );
-                    sender.sendMessage( getColorizedStr( "&uYour flight has been &cdisabled" ) );
-                }
+            else { // disabling flight
+                player.setAllowFlight( false );
+                CyberMsgUtils.sendMsg( player, "&7Your flight has been &cdisabled" );
             }
         }
 
         else { // /flight [player]
-            if ( VaultUtils.hasPerms( sender, Permissions.FLIGHT_OTHERS ) ) {
-                if ( CoreUtils.isValidUsername( args[0] ) ) {
-                    Player target = Bukkit.getPlayer( args[0] );
-                    if ( target != null ) {
-                        if ( target.getAllowFlight() == false ) { // enabling flight
-                            target.setAllowFlight( true );
-                            sender.sendMessage( getColorizedStr( "&aEnabled &y" + target.getName() + "&u's flight " ) );
-                        }
+            if ( CyberVaultUtils.hasPerms( player, FLIGHT_OTHERS_PERM ) ) {
+                final Player target = command.getPlayerAtArg( 0 );
 
-                        else { // disabling flight
-                            target.setAllowFlight( false );
-                            sender.sendMessage( getColorizedStr( "&cDisabled &y" + target.getName() + "&u's flight " ) );
-                        }
-                    }
-
-                    else {
-                        sendInvalidPlayerArg( sender, args[0] );
-                    }
+                if ( target.getAllowFlight() == false ) { // enabling flight
+                    target.setAllowFlight( true );
+                    CyberMsgUtils.sendMsg( player, "&aEnabled &b" + target.getName() + "&7's flight" );
                 }
-
-                else {
-                    sendInvalidPlayerArg( sender, args[0] );
+                else { // disabling flight
+                    target.setAllowFlight( false );
+                    CyberMsgUtils.sendMsg( player, "&cDisabled &b" + target.getName() + "&7's flight" );
                 }
             }
 
             else {
-                sender.sendMessage( PermissionMessages.FLIGHT_OTHERS );
+                sendPermissionMsg( player );
             }
         }
 

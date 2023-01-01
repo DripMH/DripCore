@@ -1,53 +1,40 @@
 package com.github.cyberryan1.dripcore.features.playtime;
 
-import com.github.cyberryan1.cybercore.utils.CoreUtils;
-import com.github.cyberryan1.dripcore.features.BaseCommand;
-import org.bukkit.Bukkit;
+import com.github.cyberryan1.cybercore.spigot.command.CyberCommand;
+import com.github.cyberryan1.cybercore.spigot.command.sent.SentCommand;
+import com.github.cyberryan1.cybercore.spigot.command.settings.ArgType;
+import com.github.cyberryan1.cybercore.spigot.utils.CyberMsgUtils;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
 
-import static com.github.cyberryan1.dripcore.utils.CommandUtils.getAllOnlinePlayerNames;
-import static com.github.cyberryan1.dripcore.utils.CommandUtils.matchOnlinePlayers;
-
-public class PlaytimeCommand extends BaseCommand {
+public class PlaytimeCommand extends CyberCommand {
 
     public PlaytimeCommand() {
-        super( "playtime", null, null, null );
+        super(
+                "playtime",
+                "&8/&7playtime &b[player]"
+        );
+        setDemandPlayer( true );
+        setMinArgLength( 0 );
+        setArgType( 0, ArgType.OFFLINE_PLAYER );
+
+        register( true );
     }
 
     @Override
-    public List<String> onTabComplete( CommandSender sender, Command command, String label, String[] args ) {
-        if ( args.length == 0 || args[0].length() == 0 ) { return getAllOnlinePlayerNames(); }
-        else if ( args.length == 1 ) { return matchOnlinePlayers( args[0] ); }
-
+    public List<String> tabComplete( SentCommand command ) {
         return List.of();
     }
 
     @Override
-    public boolean onCommand( CommandSender sender, Command command, String label, String[] args ) {
-
-        if ( demandPlayer( sender ) == false ) { return true; }
-
-        Player player = ( Player ) sender;
+    public boolean execute( SentCommand command ) {
+        final Player player = command.getPlayer();
         OfflinePlayer target = player;
 
-        if ( args.length >= 1 ) {
-            if ( CoreUtils.isValidUsername( args[0] ) ) {
-                target = Bukkit.getOfflinePlayer( args[0] );
-                if ( target == null ) {
-                    sendInvalidPlayerArg( sender, args[0] );
-                    return true;
-                }
-            }
-
-            else {
-                sendInvalidPlayerArg( sender, args[0] );
-                return true;
-            }
+        if ( command.getArgs().length >= 1 ) {
+            target = command.getOfflinePlayerAtArg( 0 );
         }
 
         long playtime = PlaytimeManager.getPlaytimeSeconds( target );
@@ -60,7 +47,7 @@ public class PlaytimeCommand extends BaseCommand {
         playtime -= MINUTES * 60;
         final long SECONDS = playtime;
 
-        CoreUtils.sendMessage( sender,
+        CyberMsgUtils.sendMessage( player,
                 "&8",
                 "&b" + target.getName() + "&7's Playtime &8- ",
                 "&8",

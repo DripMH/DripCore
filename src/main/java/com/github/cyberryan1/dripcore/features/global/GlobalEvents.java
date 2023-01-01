@@ -12,8 +12,13 @@ import org.bukkit.potion.PotionEffectType;
 
 public class GlobalEvents implements Listener {
 
-    private static boolean HUNGER_ENABLED = YMLUtils.getConfig().getBool( "features.no-hunger" );
-    private static boolean NIGHTVISION_ENABLED = YMLUtils.getConfig().getBool( "features.night-vision" );
+    private static boolean HUNGER_ENABLED = false;
+    private static boolean NIGHTVISION_ENABLED = true;
+
+    public GlobalEvents() {
+        HUNGER_ENABLED = YMLUtils.getConfig().getBool( "features.no-hunger" );
+        NIGHTVISION_ENABLED = YMLUtils.getConfig().getBool( "features.night-vision" );
+    }
 
     @EventHandler
     public void onHungerChange( FoodLevelChangeEvent event ) {

@@ -1,53 +1,48 @@
 package com.github.cyberryan1.dripcore.features.broadcast;
 
-import com.github.cyberryan1.cybercore.utils.CoreUtils;
-import com.github.cyberryan1.dripcore.features.BaseCommand;
-import com.github.cyberryan1.dripcore.lists.PermissionMessages;
-import com.github.cyberryan1.dripcore.lists.Permissions;
-import com.github.cyberryan1.dripcore.lists.Usages;
-import com.github.cyberryan1.dripcore.utils.CommandUtils;
+import com.github.cyberryan1.cybercore.spigot.command.CyberCommand;
+import com.github.cyberryan1.cybercore.spigot.command.sent.SentCommand;
+import com.github.cyberryan1.cybercore.spigot.utils.CyberColorUtils;
+import com.github.cyberryan1.cybercore.spigot.utils.CyberMsgUtils;
 import com.github.cyberryan1.dripcore.utils.yml.YMLUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class BroadcastCommand extends BaseCommand {
+public class BroadcastCommand extends CyberCommand {
+
+    private final String BROADCAST_FORMAT;
 
     public BroadcastCommand() {
-        super( "broadcast", Permissions.BROADCAST, PermissionMessages.BROADCAST, Usages.BROADCAST );
+        super(
+                "broadcast",
+                YMLUtils.getConfigUtils().getStr( "commands.broadcast.permission" ),
+                "&8/&7broadcast &b(message)"
+        );
+        setDemandPermission( true );
+        setMinArgLength( 1 );
+
+        register( false );
+
+        BROADCAST_FORMAT = YMLUtils.getConfig().getColoredStr( "commands.broadcast.broadcast-message" );
     }
 
 
     @Override
-    public List<String> onTabComplete( CommandSender sender, Command command, String label, String[] args ) {
-        return null;
+    public List<String> tabComplete( SentCommand command ) {
+        return List.of();
     }
 
     @Override
-    public boolean onCommand( CommandSender sender, Command command, String label, String[] args ) {
-
-        if ( permissionsAllowed( sender ) == false ) {
-            sendPermissionMsg( sender );
-            return true;
-        }
-
-        if ( args.length == 0 ) {
-            sendUsage( sender );
-            return true;
-        }
-
-        String combined = CommandUtils.combineRemainingArgs( args, 0 );
-        String msg = YMLUtils.getConfig().getColoredStr( "commands.broadcast.broadcast-message" );
-        msg = CoreUtils.getColored( msg.replace( "[MESSAGE]", combined ) );
+    public boolean execute( SentCommand command ) {
+        String msg = CyberColorUtils.getColored( BROADCAST_FORMAT.replace( "[MESSAGE]", command.getCombinedArgs( 0 ) ) );
         for ( Player p : Bukkit.getOnlinePlayers() ) {
             p.sendMessage( "\n", msg, "\n" );
+            CyberMsgUtils.sendMsg( p, "\n", msg, "\n" );
             p.playSound( p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 10, 1 );
         }
-
         return true;
     }
 }

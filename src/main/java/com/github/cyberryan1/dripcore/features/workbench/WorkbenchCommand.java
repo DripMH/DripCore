@@ -1,41 +1,35 @@
 package com.github.cyberryan1.dripcore.features.workbench;
 
-import com.github.cyberryan1.dripcore.features.BaseCommand;
-import com.github.cyberryan1.dripcore.lists.PermissionMessages;
-import com.github.cyberryan1.dripcore.lists.Permissions;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
+import com.github.cyberryan1.cybercore.spigot.command.CyberCommand;
+import com.github.cyberryan1.cybercore.spigot.command.sent.SentCommand;
+import com.github.cyberryan1.dripcore.utils.yml.YMLUtils;
 import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class WorkbenchCommand extends BaseCommand {
+public class WorkbenchCommand extends CyberCommand {
 
     public WorkbenchCommand() {
-        super( "workbench", Permissions.WORKBENCH, PermissionMessages.WORKBENCH, null );
+        super(
+                "workbench",
+                YMLUtils.getConfigUtils().getStr( "commands.workbench.permission" ),
+                "&8/&7workbench"
+        );
+        setDemandPlayer( true );
+        setDemandPermission( true );
+
+        register( false );
     }
 
     @Override
-    public List<String> onTabComplete( CommandSender sender, Command command, String label, String[] args ) {
-        return null;
+    public List<String> tabComplete( SentCommand command ) {
+        return List.of();
     }
 
     @Override
-    public boolean onCommand( CommandSender sender, Command command, String label, String[] args ) {
-
-        if ( demandPlayer( sender ) == false ) {
-            return true;
-        }
-
-        if ( permissionsAllowed( sender ) ) {
-            Player player = ( Player ) sender;
-            player.openWorkbench( null, true );
-        }
-
-        else {
-            sendPermissionMsg( sender );
-        }
-
+    public boolean execute( SentCommand command ) {
+        final Player player = command.getPlayer();
+        player.openWorkbench( null, true );
         return true;
     }
 }

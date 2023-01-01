@@ -1,81 +1,56 @@
 package com.github.cyberryan1.dripcore.features.teleport;
 
-import com.github.cyberryan1.cybercore.utils.CoreUtils;
-import com.github.cyberryan1.cybercore.utils.VaultUtils;
-import com.github.cyberryan1.dripcore.features.BaseCommand;
-import com.github.cyberryan1.dripcore.lists.PermissionMessages;
-import com.github.cyberryan1.dripcore.lists.Permissions;
-import com.github.cyberryan1.dripcore.lists.Usages;
-import com.github.cyberryan1.dripcore.utils.CommandUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
+import com.github.cyberryan1.cybercore.spigot.command.CyberCommand;
+import com.github.cyberryan1.cybercore.spigot.command.sent.SentCommand;
+import com.github.cyberryan1.cybercore.spigot.command.settings.ArgType;
+import com.github.cyberryan1.cybercore.spigot.utils.CyberMsgUtils;
+import com.github.cyberryan1.cybercore.spigot.utils.CyberVaultUtils;
+import com.github.cyberryan1.dripcore.utils.yml.YMLUtils;
 import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class TeleportHereCommand extends BaseCommand {
+public class TeleportHereCommand extends CyberCommand {
+
+    private final String TELEPORT_TOGGLE_BYPASS_PERM;
 
     public TeleportHereCommand() {
-        super( "tphere", Permissions.TELEPORT_HERE, PermissionMessages.TELEPORT_HERE, Usages.TELEPORT_HERE );
+        super(
+                "tphere",
+                YMLUtils.getConfigUtils().getStr( "commands.teleport.tphere.permission" ),
+                "&8/&7tphere &b(player)"
+        );
+        setDemandPlayer( true );
+        setDemandPermission( true );
+        setMinArgLength( 1 );
+        setArgType( 0, ArgType.ONLINE_PLAYER );
+
+        register( true );
+
+        TELEPORT_TOGGLE_BYPASS_PERM = YMLUtils.getConfigUtils().getStr( "commands.teleport.tptoggle.permission-bypass" );
     }
 
 
     @Override
-    public List<String> onTabComplete( CommandSender sender, Command command, String label, String[] args ) {
-        if ( permissionsAllowed( sender ) ) {
-            if ( args.length == 0 ) {
-                return CommandUtils.getAllOnlinePlayerNames();
-            }
-            else if ( args.length == 1 ) {
-                return CommandUtils.matchOnlinePlayers( args[0] );
-            }
-        }
-        return null;
+    public List<String> tabComplete( SentCommand command ) {
+        return List.of();
     }
 
     @Override
-    public boolean onCommand( CommandSender sender, Command command, String label, String[] args ) {
+    public boolean execute( SentCommand command ) {
+        final Player player = command.getPlayer();
+        final Player target = command.getPlayerAtArg( 0 );
 
-        if ( permissionsAllowed( sender ) == false ) {
-            sendPermissionMsg( sender );
-            return true;
-        }
-
-        else if ( demandPlayer( sender ) ) {
-            if ( args.length >= 1 ) {
-                if ( CoreUtils.isValidUsername( args[0] ) ) {
-                    Player target = Bukkit.getPlayer( args[0] );
-                    if ( target != null ) {
-                        Player player = ( Player ) sender;
-
-                        if ( TeleportUtils.hasTeleportEnabled( target ) == false ) {
-                            if ( VaultUtils.hasPerms( player, Permissions.TELEPORT_TOGGLE_BYPASS ) == false ) {
-                                TeleportUtils.sendTargetTeleportDisabled( player, target );
-                                return true;
-                            }
-                        }
-
-                        target.teleport( player.getLocation() );
-                        player.sendMessage( getColorizedStr( "&uTeleported &y" + target.getName() + "&u to you" ) );
-                        TeleportUtils.sendTeleportNotif( player, target, TeleportUtils.TPHERE_NOTIF );
-                    }
-
-                    else {
-                        sendInvalidPlayerArg( sender, args[0] );
-                    }
-                }
-
-                else {
-                    sendInvalidPlayerArg( sender, args[0] );
-                }
-            }
-
-            else {
-                sendUsage( sender );
+        if ( TeleportUtils.hasTeleportEnabled( target ) == false ) {
+            if ( CyberVaultUtils.hasPerms( player, TELEPORT_TOGGLE_BYPASS_PERM ) == false ) {
+                TeleportUtils.sendTargetTeleportDisabled( player, target );
+                return true;
             }
         }
 
+        target.teleport( player.getLocation() );
+        CyberMsgUtils.sendMsg( player, "&7Teleported &b" + target.getName() + "&7 to you" );
+        TeleportUtils.sendTeleportNotif( player, target, TeleportUtils.TPHERE_NOTIF );
         return true;
     }
 }

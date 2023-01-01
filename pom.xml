@@ -63,8 +63,8 @@
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
         <repository>
-            <id>CyberCore</id>
-            <url>https://raw.github.com/CyberRyan1/CyberCoreRepo/mvn-repo/</url>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
         </repository>
     </repositories>
 
@@ -78,7 +78,7 @@
         <dependency>
             <groupId>com.github.cyberryan1</groupId>
             <artifactId>CyberCore</artifactId>
-            <version>1.1.6</version>
+            <version>2.0.0.24</version>
         </dependency>
     </dependencies>
 </project>

@@ -1,68 +1,54 @@
 package com.github.cyberryan1.dripcore.features.enderchest;
 
-import com.github.cyberryan1.cybercore.utils.CoreUtils;
-import com.github.cyberryan1.cybercore.utils.VaultUtils;
-import com.github.cyberryan1.dripcore.features.BaseCommand;
-import com.github.cyberryan1.dripcore.lists.PermissionMessages;
-import com.github.cyberryan1.dripcore.lists.Permissions;
-import com.github.cyberryan1.dripcore.lists.Usages;
-import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
+import com.github.cyberryan1.cybercore.spigot.command.CyberCommand;
+import com.github.cyberryan1.cybercore.spigot.command.sent.SentCommand;
+import com.github.cyberryan1.cybercore.spigot.command.settings.ArgType;
+import com.github.cyberryan1.cybercore.spigot.utils.CyberVaultUtils;
+import com.github.cyberryan1.dripcore.utils.yml.YMLUtils;
 import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class EnderchestCommand extends BaseCommand {
+public class EnderchestCommand extends CyberCommand {
+
+    private final String ENDERCHEST_OTHERS_PERM;
 
     public EnderchestCommand() {
-        super( "enderchest", Permissions.ENDERCHEST, PermissionMessages.ENDERCHEST, Usages.ENDERCHEST );
+        super(
+                "enderchest",
+                YMLUtils.getConfigUtils().getStr( "commands.enderchest.permission" ),
+                "&8/&7enderchest &b[player]"
+        );
+        setDemandPlayer( true );
+        setMinArgLength( 0 );
+        setArgType( 0, ArgType.ONLINE_PLAYER );
+
+        register( true );
+
+        ENDERCHEST_OTHERS_PERM = YMLUtils.getConfigUtils().getStr( "commands.enderchest.permission-others" );
     }
 
 
     @Override
-    public List<String> onTabComplete( CommandSender sender, Command command, String label, String[] args ) {
-        return null;
+    public List<String> tabComplete( SentCommand command ) {
+        return List.of();
     }
 
     @Override
-    public boolean onCommand( CommandSender sender, Command command, String label, String[] args ) {
+    public boolean execute( SentCommand command ) {
+        final Player player = command.getPlayer();
 
-        if ( demandPlayer( sender ) == false ) {
-            return true;
+        if ( command.getArgs().length == 0 ) {
+            player.openInventory( player.getEnderChest() );
         }
 
-        Player player = ( Player ) sender;
-
-        if ( permissionsAllowed( sender ) ) {
-            if ( args.length == 0 ) {
-                player.openInventory( player.getEnderChest() );
-            }
-
-            else if ( VaultUtils.hasPerms( sender, Permissions.ENDERCHEST_OTHERS ) ) {
-                if ( CoreUtils.isValidUsername( args[0] ) ) {
-                    Player target = Bukkit.getPlayer( args[0] );
-                    if ( target != null ) {
-                        player.openInventory( target.getEnderChest() );
-                    }
-
-                    else {
-                        sendInvalidPlayerArg( sender, args[0] );
-                    }
-                }
-
-                else {
-                    sendInvalidPlayerArg( sender, args[0] );
-                }
-            }
-
-            else {
-                sender.sendMessage( PermissionMessages.ENDERCHEST_OTHERS );
-            }
+        else if ( CyberVaultUtils.hasPerms( player, ENDERCHEST_OTHERS_PERM ) ) {
+            Player target = command.getPlayerAtArg( 0 );
+            player.openInventory( target.getEnderChest() );
         }
 
         else {
-            sendPermissionMsg( sender );
+            sendPermissionMsg( player );
         }
 
         return true;

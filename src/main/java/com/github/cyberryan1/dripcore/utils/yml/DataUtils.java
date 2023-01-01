@@ -1,12 +1,12 @@
 package com.github.cyberryan1.dripcore.utils.yml;
 
-import com.github.cyberryan1.cybercore.managers.FileType;
-import com.github.cyberryan1.cybercore.managers.YMLManager;
-import com.github.cyberryan1.cybercore.utils.yml.YMLReadEditTemplate;
+import com.github.cyberryan1.cybercore.spigot.config.FileType;
+import com.github.cyberryan1.cybercore.spigot.config.YmlEditor;
+import com.github.cyberryan1.cybercore.spigot.config.YmlLoader;
 
-public final class DataUtils extends YMLReadEditTemplate {
+public final class DataUtils extends YmlEditor {
 
     public DataUtils() {
-        setYMLManager( new YMLManager( FileType.DATA ) );
+        super( new YmlLoader( FileType.DATA ) );
     }
 }

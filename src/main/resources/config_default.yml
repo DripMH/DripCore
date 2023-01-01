@@ -1,0 +1,107 @@
+global:
+  # What to send when a player is required for something
+  player-required: "&7Only players can execute this!"
+  # What to send when console is required for something
+  console-required: "&7This can only be ran through console!"
+
+  # Primary color
+  primary-color: "&b"
+  # Secondary color
+  secondary-color: "&7"
+
+  junior-mod-perm: "server.jrmod"
+
+commands:
+  gamemode:
+    adventure: # /gma [player] command
+      permission: "gamemode.adventure" # permission to use /gma
+    creative: # /gmc [player] command
+      permission: "gamemode.creative"
+    spectator: # /gmsp [player] command
+      permission: "gamemode.spectator"
+    survival: # /gms [player] command
+      permission: "gamemode.survival"
+
+  flight:
+    permission: "flight.use"
+    permission-others: "flight.others" # Permission to toggle other player's flight
+
+  teleport:
+    tp: # /tp (player)
+      permission: "teleport.use"
+    tphere: # /tphere (player)
+      permission: "teleport.here"
+    tpo: # /tpo (player)
+      permission: "teleport.override"
+    tpohere: # /tpohere (player)
+      permission: "teleport.here.override"
+    tptoggle: # /tptoggle
+      permission: "teleport.toggle"
+      # Allows users to teleport to a player with teleportation disabled
+      permission-bypass: "teleport.toggle.bypass"
+      # What to send when someone has teleportation disabled
+      # Variables allowed for use: [PLAYER] - the player who has teleportation disabled
+      teleport-disabled: "&b[PLAYER] &7has teleportation disabled"
+    notifs:
+      # Sends a message whenever someone uses the teleport command
+      enabled: true
+      # Permission to receive the notifications
+      permission: "teleport.notifs"
+      # Variables:
+        # [STAFF] - the player executing the command
+        # [TARGET] - the target of the command
+      # Message to send when someone teleports to someone
+      tp-message: "&7[[STAFF] has teleported to [TARGET]]"
+      # Message to send when someone teleports someone else to themselves
+      tphere-message: "&7[[STAFF] teleported [TARGET] to themself]"
+      # Message to send when someone force teleports to someone
+      tpo-message: "&7[[STAFF] has force teleported to [TARGET]]"
+      # Message to send when someone force teleports someone else to themselves
+      tpohere-message: "&7[[STAFF] force teleported [TARGET] to themself]"
+
+  buy:
+    # Must include the "https://" at the start!
+    store-link: "https://arandomstorelink.com"
+
+  workbench:
+    permission: "workbench.use"
+
+  enderchest:
+    permission: "enderchest.use"
+    # permission to view other player's enderchests
+    permission-others: "enderchest.others"
+    usage: "&8/&7enderchest &b[player]"
+
+  invsee:
+    permission: "invsee.use"
+    # permission to edit other player's inventories
+    edit-permission: "invsee.edit"
+
+  discord:
+    # Must include the "https://" at the start!
+    link: "https://discord.gg/"
+
+  tags:
+    permission: "tags.use"
+
+  broadcast:
+    permission: "broadcast.use"
+    # use [MESSAGE] variable for the message to broadcast
+    broadcast-message: "&9&lSERVER &7» &b[MESSAGE]"
+
+  rules:
+    rules-message:
+      - ""
+      - " &8- &7Any forms of &bharassment, discrimination, or anything a staff deems unfit&7 for our chat is not allowed."
+      - " &8- &7Using &balt accounts&7 to &bbypass&7 any network &bpunishments&7 is not permitted."
+      - " &8- &7Any sort of &bthreats&7 or &bencouraging death&7 won't be tolerated."
+      - " &8- &7You may not post any &blinks&7 that lead to any &bscam, sketchy, unsafe websites&7 or &bexternal server IP's&7."
+      - " &8- &bAbusing&7 any sort of &bexploits or bugs&7 or using anything that gives you an &bunfair advantage&7 is not permitted."
+      - " &8- &7Staff have the &bfinal say&7 on everything. Do not argue with them."
+      - ""
+
+features:
+  # Disable hunger (true) or enable hunger (false)
+  no-hunger: true
+  # Give players night vision on join (true) or not (false)
+  night-vision: true
