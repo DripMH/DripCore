@@ -67,12 +67,12 @@ public class InvseeListener implements Listener {
     }
 
     private void checkUpdate( Player target ) {
-        for ( Player staff : InvseeGui.staffTargets.keySet() ) {
-            if ( InvseeGui.staffTargets.get( staff ).getUniqueId().equals( target.getUniqueId() ) ) {
-                Bukkit.getScheduler().runTaskLater( CyberCore.getPlugin(), () -> {
+        Bukkit.getScheduler().runTaskLater( CyberCore.getPlugin(), () -> {
+            for ( Player staff : InvseeGui.staffTargets.keySet() ) {
+                if ( InvseeGui.staffTargets.get( staff ).getUniqueId().equals( target.getUniqueId() ) ) {
                     InvseeGui.openGuis.get( staff ).update();
-                }, 2L );
+                }
             }
-        }
+        }, 2L );
     }
 }
