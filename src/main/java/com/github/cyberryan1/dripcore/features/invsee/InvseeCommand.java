@@ -17,6 +17,7 @@ public class InvseeCommand extends CyberCommand {
                 "&8/&7invsee &b(player)"
         );
         setDemandPlayer( true );
+        setDemandPermission( true );
         setMinArgLength( 1 );
         setArgType( 0, ArgType.ONLINE_PLAYER );
 
