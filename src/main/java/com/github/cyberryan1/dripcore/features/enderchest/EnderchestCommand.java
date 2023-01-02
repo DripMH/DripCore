@@ -19,6 +19,7 @@ public class EnderchestCommand extends CyberCommand {
                 YMLUtils.getConfigUtils().getStr( "commands.enderchest.permission" ),
                 "&8/&7enderchest &b[player]"
         );
+        setDemandPermission( true );
         setDemandPlayer( true );
         setMinArgLength( 0 );
         setArgType( 0, ArgType.ONLINE_PLAYER );
