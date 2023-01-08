@@ -39,7 +39,6 @@ public class BroadcastCommand extends CyberCommand {
     public boolean execute( SentCommand command ) {
         String msg = CyberColorUtils.getColored( BROADCAST_FORMAT.replace( "[MESSAGE]", command.getCombinedArgs( 0 ) ) );
         for ( Player p : Bukkit.getOnlinePlayers() ) {
-            p.sendMessage( "\n", msg, "\n" );
             CyberMsgUtils.sendMsg( p, "\n", msg, "\n" );
             p.playSound( p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 10, 1 );
         }
