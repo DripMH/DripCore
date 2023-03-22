@@ -6,6 +6,7 @@ import com.github.cyberryan1.dripcore.utils.yml.YMLUtils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.server.TabCompleteEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
 public class AntiCommandEvents implements Listener {
 
     private static List<String> preventedCommands = new ArrayList<>( List.of(
-            "/pl", "/plugin", "/plugins", "/say", "/me", "/?", "/w", "/whisper", "/help"
+            "/pl", "/plugin", "/plugins", "/say", "/me", "/?", "/w", "/whisper", "/help", "/ver", "/?", "/version"
     ) );
 
     private static String JUNIOR_MOD_PERM = "";
@@ -42,6 +43,20 @@ public class AntiCommandEvents implements Listener {
                 else {
                     CyberMsgUtils.sendMsg( event.getPlayer(), "&cYou cannot run this command" );
                 }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onTabCompleteEvent( TabCompleteEvent event ) {
+        final String MSG = event.getBuffer();
+        if ( CyberVaultUtils.hasPerms( event.getSender(), JUNIOR_MOD_PERM ) ) { return; }
+        if ( MSG.length() <= 2 ) { event.setCancelled( true ); return; }
+
+        for ( String str : preventedCommands ) {
+            if ( MSG.startsWith( str + " " ) ) {
+                event.setCancelled( true );
+                return;
             }
         }
     }
